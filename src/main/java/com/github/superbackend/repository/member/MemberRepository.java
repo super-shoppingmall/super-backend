@@ -17,6 +17,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     // 회원 ID를 기반으로 회원 상태를 업데이트하는 메서드
     @Modifying
     @Transactional
-    @Query("UPDATE Member m SET m.status = :status WHERE m.id = :id")
+    @Query("UPDATE Member m SET m.status = :status WHERE m.memberId = :id")
     void updateMemberStatus(Long id, String status);
 }

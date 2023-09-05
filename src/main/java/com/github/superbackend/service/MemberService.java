@@ -70,27 +70,32 @@ public class MemberService implements UserDetailsService {
         }
     }
 
-    public Member registerMember(String email, String password, String phone) {
+    public Member registerMember(MemberDTO memberDTO) {
         // 이메일을 기준으로 중복 회원 검사
+       String email =  memberDTO.getEmail();
+        String password = memberDTO.getPassword();
+
         if (memberRepository.existsByEmail(email)) {
             throw new RuntimeException("이미 등록된 이메일 주소입니다.");
         }
 
         // 비밀번호 암호화
+
         String encodedPassword = passwordEncoder.encode(password);
+
 
         // 회원 정보 생성 및 저장
         Member newMember = new Member();
         newMember.setEmail(email);
         newMember.setPassword(encodedPassword);
-        newMember.setPhone(phone);
-        newMember.setAddress(address); // 주소 설정
-        newMember.setGender(gender);   // 성별 설정
+        newMember.setPhone(memberDTO.getPhone());
+        newMember.setAddress(memberDTO.getAddress()); // 주소 설정
+        newMember.setGender(memberDTO.getGender());   // 성별 설정
 
         return memberRepository.save(newMember);
     }
 
-    public boolean deleteMember(Integer memberId) {
+    public boolean deleteMember(Long memberId) {
         // 회원 정보 가져오기
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));

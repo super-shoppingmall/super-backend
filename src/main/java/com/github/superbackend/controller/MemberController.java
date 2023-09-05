@@ -53,7 +53,7 @@ public class MemberController {
             return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
         }
 
-        Member registeredMember = memberService.registerMember(email, password, phone);
+        Member registeredMember = memberService.registerMember(memberDTO);
 
         if (registeredMember != null) {
             return new ResponseEntity<>("Signup successful", HttpStatus.OK);
@@ -62,7 +62,7 @@ public class MemberController {
         }
     }
     @DeleteMapping("/{memberId}")
-    public ResponseEntity<?> deleteMember(@PathVariable Integer memberId) {
+    public ResponseEntity<?> deleteMember(@PathVariable Long memberId) {
         // 회원 탈퇴 메서드 호출
         boolean result = memberService.deleteMember(memberId);
 

@@ -71,7 +71,7 @@ public class AuthController {
         }
 
         // 회원 가입 메서드 호출
-        Member registeredMember = memberService.registerMember(email, password, phone);
+        Member registeredMember = memberService.registerMember(memberDTO);
 
         if (registeredMember != null) {
             // 회원가입 성공 시 JWT 토큰 생성
