@@ -1,6 +1,6 @@
 package com.github.superbackend.repository.order;
 
-import com.github.superbackend.repository.member.Member;
+import com.github.superbackend.entity.Member;
 import com.github.superbackend.repository.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
