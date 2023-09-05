@@ -1,6 +1,7 @@
 package com.github.superbackend.controller;
 
-import lombok.Value;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -21,7 +22,7 @@ import java.nio.file.StandardCopyOption;
 @RequestMapping("/api/profile")
 public class ProfileController {
 
-    @Value("${file.upload-dir}")
+    @Value("${spring.file.upload-dir}")
     private String uploadDir;
 
     @PostMapping("/upload")
