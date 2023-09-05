@@ -1,6 +1,6 @@
 package com.github.superbackend.repository.paymoney;
 
-import com.github.superbackend.repository.member.Member;
+import com.github.superbackend.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

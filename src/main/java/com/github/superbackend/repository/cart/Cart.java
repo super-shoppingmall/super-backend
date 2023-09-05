@@ -1,6 +1,6 @@
 package com.github.superbackend.repository.cart;
 
-import com.github.superbackend.repository.member.Member;
+import com.github.superbackend.entity.Member;
 import com.github.superbackend.repository.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Builder
 @AllArgsConstructor
