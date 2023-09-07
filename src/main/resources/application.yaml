@@ -9,6 +9,12 @@ spring:
     url: jdbc:mysql://localhost:3306/supercoding?serverTimezone=Asia/Seoul
     username: root
     password: 12341234
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  file:
+    upload-dir: C:\superProfile
   jpa:
     hibernate:
       ddl-auto: create # 스키마 자동 생성

@@ -1,32 +1,33 @@
+
 package com.github.superbackend.repository.cart;
 
 import com.github.superbackend.repository.member.Member;
-import com.github.superbackend.repository.product.Product;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 @Entity
+@Table(name = "cart")
+@Getter
+@Setter
+@ToString
 public class Cart {
     @Id
+    @Column(name = "cart_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cartId;
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    private Long id;
 
-    private Integer cartCount;
-    private Integer cartTotalPrice;
+    @OneToOne(fetch = FetchType.LAZY) // OneToOne
+    @JoinColumn(name="member_id")
+    private Member member;
+
+    public static Cart createCart(Member member){
+        Cart cart = new Cart();
+        cart.setMember(member);
+        return cart;
+    }
 
 }
+
