@@ -1,3 +1,4 @@
+
 package com.github.superbackend.repository.cart.entity;
 
 import com.github.superbackend.repository.member.Member;
@@ -29,3 +30,4 @@ public class Cart {
     }
 
 }
+
