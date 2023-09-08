@@ -26,8 +26,8 @@ public class ProductSaleService {
     public ProductSaleResDto registerProductSale(String username, ProductSaleReqDto reqDto) {
         // 로그인 한 사람 = 판매자
         //Member seller = memberRepository.findByEmail(username).orElseThrow(() -> new IllegalArgumentException("No MemberId"));
-        Member seller = memberRepository.findByEmail(username);
-        System.out.println("셀러" + seller);
+        //Member seller = memberRepository.findByEmail(username);
+        //System.out.println("셀러" + seller);
 
         // 이미지가 있다면 S3에 업로드 후 URL 가져오기
         //List<String> imageUrls = s3Uploader.uploadFiles(reqDto.getProductImageFiles());
