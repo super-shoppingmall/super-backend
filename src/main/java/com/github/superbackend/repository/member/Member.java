@@ -1,10 +1,9 @@
-package com.github.superbackend.entity;
+package com.github.superbackend.repository.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -42,4 +41,3 @@ public class Member {
     @Column(name = "status")
     private String status;
 }
- //userdetails
