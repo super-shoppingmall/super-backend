@@ -24,9 +24,10 @@ public class PaymoneyController {
     @ApiOperation("쇼핑몰 페이머니 충전")
     @PostMapping
     public ResponseEntity<ResponseDto> insertPaymoney(@RequestBody PaymoneyRequest paymoneyRequest,
-                                                      @AuthenticationPrincipal UserDetails userDetails) {
+                                                      @AuthenticationPrincipal UserDetails userDetails
+    ) {
         // TODO : userDetails 확인필요
-        String username = "1"; //userDetails.getUsername();
+        String username = "2"; //userDetails.getUsername();
         Integer money = paymoneyRequest.getPaymoney();
 
         Paymoney paymoney = paymoneyService.savePaymoney(Long.parseLong(username), money, true);
@@ -50,9 +51,9 @@ public class PaymoneyController {
 
     @ApiOperation("멤버아이디로 쇼핑몰 페이머니 조회")
     @GetMapping
-    public ResponseEntity<ResponseDto> getPaymoney(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ResponseDto> getPaymoney() { // @AuthenticationPrincipal UserDetails userDetails
         // TODO : Userdetails 확인 필요
-        String username = userDetails.getUsername();
+        String username = "2"; //userDetails.getUsername();
         Paymoney paymoney = paymoneyService.findPaymoney(Long.parseLong(username));
 
         if (paymoney != null) {
@@ -73,10 +74,9 @@ public class PaymoneyController {
 
     @ApiOperation("쇼핑몰 페이머니 결제, 차감")
     @PutMapping
-    public ResponseEntity<ResponseDto> updatePaymoney(@RequestBody PaymoneyRequest paymoneyRequest,
-                                                      @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ResponseDto> updatePaymoney(@RequestBody PaymoneyRequest paymoneyRequest) { // ,@AuthenticationPrincipal UserDetails userDetails
         // TODO : userDetails 확인필요
-        String username = userDetails.getUsername();
+        String username = "2"; //userDetails.getUsername();
         Integer money = paymoneyRequest.getPaymoney();
 
         Paymoney paymoney = paymoneyService.savePaymoney(Long.parseLong(username), money, false);
