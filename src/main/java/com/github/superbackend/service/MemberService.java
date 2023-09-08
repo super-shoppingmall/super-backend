@@ -1,7 +1,7 @@
 package com.github.superbackend.service;
 
 import com.github.superbackend.dto.MemberDTO;
-import com.github.superbackend.entity.Member;
+import com.github.superbackend.repository.member.Member;
 import com.github.superbackend.repository.member.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

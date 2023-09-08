@@ -1,5 +1,5 @@
 
-package com.github.superbackend.repository.cart.entity;
+package com.github.superbackend.repository.cart;
 
 import com.github.superbackend.repository.member.Member;
 import lombok.Getter;
@@ -16,10 +16,10 @@ import javax.persistence.*;
 public class Cart {
     @Id
     @Column(name = "cart_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY) // OneToOne
     @JoinColumn(name="member_id")
     private Member member;
 
