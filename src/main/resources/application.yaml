@@ -17,10 +17,17 @@ spring:
     upload-dir: C:\superProfile
   jpa:
     hibernate:
-      ddl-auto: create # 스키마 자동 생성
+      ddl-auto: update # 스키마 자동 생성
     show-sql: true # SQL 퀴리 출력
     properties:
       hibernate:
         format_sql: true # SQL pretty print
 
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
+logging:
+  level:
+    org.hibernate.type: trace
+    com.app: debug
