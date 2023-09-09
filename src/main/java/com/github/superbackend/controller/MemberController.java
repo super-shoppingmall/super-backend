@@ -2,8 +2,10 @@ package com.github.superbackend.controller;
 
 import com.github.superbackend.config.JwtUtil;
 import com.github.superbackend.dto.MemberDTO;
+import com.github.superbackend.dto.ResponseDto;
 import com.github.superbackend.repository.member.Member;
 import com.github.superbackend.service.MemberService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,4 +75,18 @@ public class MemberController {
         }
     }
 
+    // hyuna
+    @ApiOperation("회원 유저 정보 조회")
+    @GetMapping("/{memberId}")
+    public ResponseEntity<MemberDTO> getMember(@PathVariable Long memberId) {
+        MemberDTO member = memberService.getMember(memberId);
+
+        // TODO : 멤버 확인하고 DTO
+        if (member != null) {
+            return ResponseEntity.ok(member);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }

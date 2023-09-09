@@ -1,0 +1,13 @@
+#EC2에 접근 하는 application
+spring:
+  config:
+    activate:
+      on-profile: prod
+logging:
+  config: classpath:logback-spring-prod.xml
+
+datasource:
+  driver-class-name: org.mariadb.jdbc.Driver
+  url: jdbc:mariadb://super-1.cxxieeplexh7.ap-northeast-2.rds.amazonaws.com:3306/supercoding?serverTimezone=Asia/Seoul
+  username: ${DATABASE_USERNAME}
+  password: ${DATABASE_PASSWORD}

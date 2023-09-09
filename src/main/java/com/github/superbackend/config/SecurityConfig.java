@@ -33,8 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
+                .httpBasic().disable() // 스웨거
                 .authorizeRequests()
-                .antMatchers("/api/auth/**","/api/members/**", "/api/paymoney").permitAll() // 로그인 엔드포인트는 인증 없이 접근 가능
+                .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs", "/webjars/**", "/api/auth/**","/api/members/**", "/api/paymoney").permitAll() // 로그인 엔드포인트는 인증 없이 접근 가능
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
