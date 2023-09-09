@@ -29,7 +29,7 @@ public class Product{
     private int productPrice;
     private int productQuantity;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL) // 저장, 수정, 삭제 같이됨.
     private List<ProductImage> images = new ArrayList<>();  //productImages;
 
     private String productDetail;
@@ -42,6 +42,10 @@ public class Product{
 
     // @OneToMany(mappedBy="product", cascade=CascadeType.ALL)
     // private List<Order> orders;  // 해당 상품에 대한 모든 주문들
+
+    @Column(name = "product_status")
+    @Enumerated(EnumType.STRING)
+    private ProductStatus productStatus;
 
     @CreatedDate
     private LocalDateTime createdAt;

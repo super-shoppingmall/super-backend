@@ -7,6 +7,7 @@ import com.github.superbackend.repository.member.MemberRepository;
 import com.github.superbackend.repository.product.Product;
 import com.github.superbackend.repository.product.ProductImage;
 import com.github.superbackend.repository.product.ProductRepository;
+import com.github.superbackend.repository.product.ProductStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +27,7 @@ public class ProductSaleService {
     public ProductSaleResDto registerProductSale(String username, ProductSaleReqDto reqDto) {
         // 로그인 한 사람 = 판매자
         //Member seller = memberRepository.findByEmail(username).orElseThrow(() -> new IllegalArgumentException("No MemberId"));
-        //Member seller = memberRepository.findByEmail(username);
+        Member seller = memberRepository.findByEmail(username);
         //System.out.println("셀러" + seller);
 
         // 이미지가 있다면 S3에 업로드 후 URL 가져오기
@@ -43,11 +44,12 @@ public class ProductSaleService {
         product.setProductPrice(reqDto.getProductPrice());
         product.setProductQuantity(reqDto.getProductQuantity());
         product.setProductDetail(reqDto.getProductDetail());
+        product.setProductStatus(ProductStatus.ACTIVE);
         product.setClosingAt(reqDto.getClosingAt());
 
 
         for (String imageUrl : imageUrls) {  // 이미지 URL 설정
-            product.getImages().add(new ProductImage(imageUrl));
+            product.getImages().add(new ProductImage(imageUrl, product));
             System.out.println("imageUrl 하니씩 출력 "+imageUrl);
         }
 
