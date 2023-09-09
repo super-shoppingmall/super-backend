@@ -26,6 +26,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
+    // 배포 시 마리아 db
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.7.2'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -37,9 +39,15 @@ dependencies {
     // Test LOMBOK
     testCompileOnly 'org.projectlombok:lombok';
     testAnnotationProcessor 'org.projectlombok:lombok';
-
+    // Mapstruct
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.named('bootJar') {
+    mainClass = 'com.github.superbackend.SuperBackendApplication'
 }
