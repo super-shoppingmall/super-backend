@@ -2,3 +2,16 @@ spring:
   config:
     activate:
       on-profile: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/supercoding?serverTimezone=Asia/Seoul
+    username: root
+    password: 12341234
+  jpa:
+    hibernate:
+      ddl-auto: update # 스키마 자동 생성
+    show-sql: true # SQL 퀴리 출력
+    properties:
+      hibernate:
+        format_sql: true # SQL pretty print
+
