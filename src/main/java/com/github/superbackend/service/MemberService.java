@@ -121,6 +121,25 @@ public class MemberService implements UserDetailsService {
         MemberDTO memberDto = MemberMapper.INSTANCE.memberEntityToDto(member);
         return memberDto;
     }
+
+    @Transactional
+    public MemberDTO updateMember(MemberDTO memberDTO, Long memberId) {
+        // 회원을 조회하고
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+
+        // 회원이 존재하면 dto로 들어온 정보 값을 넣고
+        member.setPhone(memberDTO.getPhone());
+        member.setAddress(memberDTO.getAddress());
+        member.setAboutMe(memberDTO.getAboutMe());
+        member.setProfileImage(memberDTO.getProfileImage());
+
+        Member newMember = memberRepository.save(member);
+
+        // Entity -> Dto
+        MemberDTO newMemberDto = MemberMapper.INSTANCE.memberEntityToDto(newMember);
+        return newMemberDto;
+    }
 }
 
 
