@@ -81,7 +81,20 @@ public class MemberController {
     public ResponseEntity<MemberDTO> getMember(@PathVariable Long memberId) {
         MemberDTO member = memberService.getMember(memberId);
 
-        // TODO : 멤버 확인하고 DTO
+        // TODO : aboutMe..
+        if (member != null) {
+            return ResponseEntity.ok(member);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @ApiOperation("회원 유저 정보 수정")
+    @PutMapping("/{memberId}")
+    public ResponseEntity<MemberDTO> updateMember(@RequestBody MemberDTO memberDTO, @PathVariable Long memberId) {
+        MemberDTO member = memberService.updateMember(memberDTO, memberId);
+
         if (member != null) {
             return ResponseEntity.ok(member);
         }

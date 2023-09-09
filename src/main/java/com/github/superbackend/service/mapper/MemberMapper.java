@@ -12,7 +12,7 @@ public interface MemberMapper {
 
     // hyuna Entity => DTO
     @Mapping(source = "email", target = "email")
-    //@Mapping(source = "password", target = "password")
+    @Mapping(source = "password", target = "password", ignore = true) // pw는 제외하기
     @Mapping(source = "phone", target = "phone")
     @Mapping(source = "address", target = "address")
     @Mapping(source = "gender", target = "gender")
