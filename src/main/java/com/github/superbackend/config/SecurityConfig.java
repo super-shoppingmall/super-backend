@@ -39,8 +39,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
+                .headers().frameOptions().sameOrigin()
+                .and()
+                .formLogin().disable()
+                .csrf().disable() // 쿠키 기반이 아닌 JWT 기반이므로 사용하지 않음
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
+                .httpBasic().disable() // ID, Password 문자열을 Base64로 인코딩하여 전달하는 구조
+                .rememberMe().disable()
                 .authorizeRequests()
                 .antMatchers("/api/auth/**","/api/members/**", "/api/paymoney", "/api/products/sale/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs", "/webjars/**").permitAll() // 로그인 엔드포인트는 인증 없이 접근 가능
                 .anyRequest().authenticated()
