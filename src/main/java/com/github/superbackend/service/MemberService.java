@@ -19,19 +19,28 @@ import java.util.Optional;
 public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
+    private final int maxLoginAttempts = 5;       // 최대 로그인 실패 횟수
+    private final int lockDurationMinutes = 30;   // 잠금 기간 (분)
     @Autowired
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public boolean isEmailAlreadyExists(String email) {
         Optional<Member> existingMember = Optional.ofNullable(memberRepository.findByEmail(email));
         return existingMember.isPresent();
     }
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
+    public Long getMemberIdByEmail(String email) {
+        Member member = memberRepository.findByEmail(email);
+        if (member != null) {
+            return member.getMemberId();
+        }
+        return null; // 해당 이메일을 가진 멤버가 없을 경우 null 반환
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -107,6 +116,19 @@ public class MemberService implements UserDetailsService {
         memberRepository.save(member);
 
         return true; // 성공적으로 탈퇴 처리된 경우 true 반환
+    }
+    // 로그인 실패 횟수 증가 및 잠금 상태 확인
+    public boolean loginFailed(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElse(null);
+        if (member != null) {
+            member.incrementLoginAttempts();
+            if (member.getLoginAttempts() >= maxLoginAttempts) {
+                member.setAccountLocked(maxLoginAttempts, lockDurationMinutes);
+            }
+            memberRepository.save(member);
+            return member.isAccountLocked();
+        }
+        return false;
     }
 }
 

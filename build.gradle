@@ -31,6 +31,18 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.3.8.RELEASE'
+
+    // Spring Boot Starter와 Spring Security 추가
+    implementation 'org.springframework.boot:spring-boot-starter'
+
+    // 네이버 OAuth2 클라이언트 라이브러리 추가
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'com.github.scribejava:scribejava-core:7.3.0' // 네이버 OAuth2에 필요한 라이브러리
+
+    // 카카오 OAuth2 클라이언트 라이브러리 추가
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {

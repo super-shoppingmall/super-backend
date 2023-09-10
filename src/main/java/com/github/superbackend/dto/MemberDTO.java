@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Data
 public class MemberDTO {
+    private String memberId;
     private String email;
     private String password;
     private String phone;
