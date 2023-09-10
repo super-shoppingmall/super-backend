@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,4 +32,22 @@ public class ProductSaleController {
         return ResponseEntity.ok(result);
 
     }
+
+
+    // 쇼핑몰 판매 물품 조회 (판매 중인 물품만)
+    @GetMapping("/myproducts")
+    public ResponseEntity<List<ProductSaleResDto>> getMyProductsOnSale(
+            @AuthenticationPrincipal UserDetails userDetails) {
+        List<ProductSaleResDto> products = productSaleService.getProductsOnSale(userDetails.getUsername());
+        return ResponseEntity.ok(products);
+    }
+
+    // 상품 상태 업데이트 (판매 종료 날짜가 지난 상품의 상태를 CLOSED로 변경)
+    @PatchMapping("/updateStatus")
+    public ResponseEntity<Void> updateProductStatus() {
+        productSaleService.updateProductStatus();
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
