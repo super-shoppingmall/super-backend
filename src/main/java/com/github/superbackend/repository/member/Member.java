@@ -40,4 +40,7 @@ public class Member {
     private LocalDateTime updatedAt;
     @Column(name = "status")
     private String status;
+
+    @Column(name = "about_me")
+    private String aboutMe;
 }
