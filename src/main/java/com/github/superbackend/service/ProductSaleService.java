@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,7 @@ public class ProductSaleService {
         product.setProductDetail(reqDto.getProductDetail());
         product.setProductStatus(ProductStatus.ACTIVE);
         product.setClosingAt(reqDto.getClosingAt());
+        product.setMember(seller);
 
 
         for (String imageUrl : imageUrls) {  // 이미지 URL 설정
@@ -79,5 +81,21 @@ public class ProductSaleService {
                 .map(ProductImage::getProductImageUrl)
                 .collect(Collectors.toList()));
         return resDto;
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductSaleResDto> getProductsOnSale(String username) {
+        Member seller = memberRepository.findByEmail(username);
+
+        List<Product> products = productRepository.findByMemberAndClosingAtAfter(seller, LocalDate.now());
+
+        return products.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void updateProductStatus() {
+        productRepository.updateStatusForPastProducts(ProductStatus.CLOSED, LocalDate.now());
     }
 }
