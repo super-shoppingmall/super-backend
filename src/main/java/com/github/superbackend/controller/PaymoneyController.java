@@ -26,8 +26,8 @@ public class PaymoneyController {
     public ResponseEntity<ResponseDto> insertPaymoney(@RequestBody PaymoneyRequest paymoneyRequest,
                                                       @AuthenticationPrincipal UserDetails userDetails
     ) {
-        // TODO : userDetails 확인필요
-        String username = "2"; //userDetails.getUsername();
+        // TODO : userDetails 확인필요 => memberId..
+        String username = userDetails.getUsername();
         Integer money = paymoneyRequest.getPaymoney();
 
         Paymoney paymoney = paymoneyService.savePaymoney(Long.parseLong(username), money, true);
