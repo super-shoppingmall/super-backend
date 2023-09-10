@@ -3,6 +3,7 @@ package com.github.superbackend.service;
 import com.github.superbackend.dto.MemberDTO;
 import com.github.superbackend.repository.member.Member;
 import com.github.superbackend.repository.member.MemberRepository;
+import com.github.superbackend.service.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.User;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -107,6 +109,36 @@ public class MemberService implements UserDetailsService {
         memberRepository.save(member);
 
         return true; // 성공적으로 탈퇴 처리된 경우 true 반환
+    }
+
+    // hyuna
+    @Transactional(readOnly = true)
+    public MemberDTO getMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+
+        // Entity -> Dto
+        MemberDTO memberDto = MemberMapper.INSTANCE.memberEntityToDto(member);
+        return memberDto;
+    }
+
+    @Transactional
+    public MemberDTO updateMember(MemberDTO memberDTO, Long memberId) {
+        // 회원을 조회하고
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+
+        // 회원이 존재하면 dto로 들어온 정보 값을 넣고
+        member.setPhone(memberDTO.getPhone());
+        member.setAddress(memberDTO.getAddress());
+        member.setAboutMe(memberDTO.getAboutMe());
+        member.setProfileImage(memberDTO.getProfileImage());
+
+        Member newMember = memberRepository.save(member);
+
+        // Entity -> Dto
+        MemberDTO newMemberDto = MemberMapper.INSTANCE.memberEntityToDto(newMember);
+        return newMemberDto;
     }
 }
 
