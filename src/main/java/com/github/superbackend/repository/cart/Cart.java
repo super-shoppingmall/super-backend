@@ -1,31 +1,33 @@
-//package com.github.superbackend.repository.cart;
-//
-//import com.github.superbackend.entity.Member;
-//import com.github.superbackend.repository.product.Product;
-//import lombok.AllArgsConstructor;
-//import lombok.Builder;
-//import lombok.Data;
-//import lombok.NoArgsConstructor;
-//
-//import javax.persistence.*;
-//
-//@Builder
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@Data
-//@Entity
-//public class Cart {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long cartId;
-//    @ManyToOne
-//    @JoinColumn(name = "member_id")
-//    private Member member;
-//    @ManyToOne
-//    @JoinColumn(name = "product_id")
-//    private Product product;
-//
-//    private Integer cartCount;
-//    private Integer cartTotalPrice;
-//
-//}
+
+package com.github.superbackend.repository.cart.entity;
+
+import com.github.superbackend.repository.member.Member;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "cart")
+@Getter
+@Setter
+@ToString
+public class Cart {
+    @Id
+    @Column(name = "cart_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id")
+    private Member member;
+
+    public static Cart createCart(Member member){
+        Cart cart = new Cart();
+        cart.setMember(member);
+        return cart;
+    }
+
+}
+
