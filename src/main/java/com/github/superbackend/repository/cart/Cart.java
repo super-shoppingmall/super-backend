@@ -1,9 +1,8 @@
-package com.github.superbackend.repository.cart.entity;
+package com.github.superbackend.repository.cart;
 
 import com.github.superbackend.repository.member.Member;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -11,21 +10,18 @@ import javax.persistence.*;
 @Table(name = "cart")
 @Getter
 @Setter
-@ToString
+
 public class Cart {
     @Id
     @Column(name = "cart_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    private Long CartId;
+    @OneToOne
+    @JoinColumn(name = "member_id")
     private Member member;
-
     public static Cart createCart(Member member){
         Cart cart = new Cart();
         cart.setMember(member);
         return cart;
     }
-
 }
