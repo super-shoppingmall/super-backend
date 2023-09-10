@@ -20,3 +20,14 @@ spring:
 
 logging:
   config: classpath:logback-spring-prod.xml
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2  # AWS 기본 리전을 설정
+    stack:
+      auto: false
+    s3:
+      bucket: ${S3_BUCKET}
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
