@@ -47,7 +47,10 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwt = jwtUtil.generateToken(loginRequest.getEmail()); //  loginRequest.getEmail()) String.valueOf(authentication)
+        //String jwt = jwtUtil.generateToken(String.valueOf(authentication));
+        String jwt = jwtUtil.generateToken(loginRequest.getEmail());
+
+        //커스텀유저디테일즈 - > 쓰고싶은 유저정보들
 
         // 사용자 정보 추출 (예: 사용자 이름 및 권한)
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
