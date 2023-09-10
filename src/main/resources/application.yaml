@@ -21,14 +21,3 @@ logging:
   level:
     org.hibernate.type: trace
     com.app: debug
-
-cloud:
-  aws:
-    region:
-      static: ap-northeast-2  # AWS 기본 리전을 설정
-    stack:
-      auto: false
-    s3:
-      bucket: supershyshop
-      access-key: AKIAUN4O5LS25F7EHF57
-      secret-key: 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
