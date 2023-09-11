@@ -19,21 +19,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class OAuth2Config {
 
-    @Bean
-    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests(authorizeRequests ->
-                        authorizeRequests
-                                .antMatchers("/", "/oauth2/authorization/kakao", "/oauth2/authorization/naver").permitAll()
-                                .anyRequest().authenticated()
-                )
-                .oauth2Login(oauth2Login ->
-                        oauth2Login
-                                .clientRegistrationRepository(clientRegistrationRepository())
-                                .loginPage("/login")
-                );
-        return http.build();
-    }
 
     @Bean
     public ClientRegistrationRepository clientRegistrationRepository() {
