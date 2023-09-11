@@ -4,15 +4,13 @@ import com.github.superbackend.dto.ProductSaleReqDto;
 import com.github.superbackend.dto.ProductSaleResDto;
 import com.github.superbackend.repository.member.Member;
 import com.github.superbackend.repository.member.MemberRepository;
-import com.github.superbackend.repository.product.Product;
-import com.github.superbackend.repository.product.ProductImage;
-import com.github.superbackend.repository.product.ProductRepository;
-import com.github.superbackend.repository.product.ProductStatus;
+import com.github.superbackend.repository.product.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +25,6 @@ public class ProductSaleService {
     @Transactional
     public ProductSaleResDto registerProductSale(String username, ProductSaleReqDto reqDto) {
         // 로그인 한 사람 = 판매자
-        //Member seller = memberRepository.findByEmail(username).orElseThrow(() -> new IllegalArgumentException("No MemberId"));
         Member seller = memberRepository.findByEmail(username);
         //System.out.println("셀러" + seller);
 
@@ -69,7 +66,7 @@ public class ProductSaleService {
     // Entity -> DTO 변환 메소드
     public ProductSaleResDto convertToDto(Product savedproduct) {
         ProductSaleResDto resDto = new ProductSaleResDto();
-        // resDto.setMemberId(savedproduct.getMember().getMemberId());
+        resDto.setMemberId(savedproduct.getMember().getMemberId());
         resDto.setProductId(savedproduct.getProductId());
         resDto.setProductName(savedproduct.getProductName());
         resDto.setCategoryName(savedproduct.getCategoryName());
@@ -77,6 +74,7 @@ public class ProductSaleService {
         resDto.setProductQuantity(savedproduct.getProductQuantity());
         resDto.setProductDetail(savedproduct.getProductDetail());
         resDto.setClosingAt(savedproduct.getClosingAt());
+        resDto.setProductStatus(savedproduct.getProductStatus().name());
         resDto.setProductImageUrls(savedproduct.getImages().stream()
                 .map(ProductImage::getProductImageUrl)
                 .collect(Collectors.toList()));
@@ -84,14 +82,52 @@ public class ProductSaleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductSaleResDto> getProductsOnSale(String username) {
+    public List<ProductSaleResDto> getProductsOnSale(String username, boolean isActive) {
         Member seller = memberRepository.findByEmail(username);
+        System.out.println(seller.toString());
 
-        List<Product> products = productRepository.findByMemberAndClosingAtAfter(seller, LocalDate.now());
+        List<Product> products;
 
-        return products.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        if (seller != null) {
+            if(isActive) {
+                // 물품 상태가 ProductStatus.ACTIVE 인 물품만 가져오도록
+                products = productRepository.findByMemberAndProductStatus(seller, ProductStatus.ACTIVE);
+                //List<Product> products = productRepository.findByMember(seller);
+
+            }
+            else { //sale finised and closed
+                products = productRepository.findByMemberAndProductStatusIsNotActive();
+            }
+
+            if (!products.isEmpty()) {
+                return products.stream()
+                        .map(this::convertToDto)
+                        .collect(Collectors.toList());
+            }
+
+
+        }
+
+        // 물품이 없거나 판매자를 찾지 못한 경우 빈 리스트 반환
+        return Collections.emptyList(); // 근데 아까 404 에러 요걸로 나나
+    }
+
+
+    @Transactional
+    public ProductSaleResDto updateProductQuantity(Long productId, int newQuantity, String username) {
+        Member seller = memberRepository.findByEmail(username);
+        Product product = productRepository.findByProductIdAndMember(productId, seller);
+
+        if (product != null) {
+            // 재고 수정 로직 구현
+            if (newQuantity >= 0) {
+                product.setProductQuantity(newQuantity);
+                Product updatedProduct = productRepository.save(product);
+                return convertToDto(updatedProduct);
+            }
+        }
+
+        return null; // 재고 수정에 실패한 경우 null 반환
     }
 
     @Transactional
