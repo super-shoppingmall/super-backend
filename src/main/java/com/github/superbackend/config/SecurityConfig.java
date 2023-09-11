@@ -8,11 +8,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -34,56 +33,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
     @Override
-    public void configure(HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/login", "/login/oauth2/code/naver", "/login/oauth2/code/kakao").permitAll() // 로그인 및 OAuth2 콜백 경로 설정
+                .antMatchers("/login", "/login/oauth2/code/naver", "/login/oauth2/code/kakao").permitAll()
                 .anyRequest().authenticated()
+                .and()
+                .oauth2Login() // OAuth2 로그인 설정 시작
+                .loginPage("/login") // 로그인 페이지 경로 설정 (사용자 정의 로그인 페이지를 만들 경우)
+                .defaultSuccessUrl("/user") // 로그인 성공 후 리디렉션될 경로 설정
+                .userInfoEndpoint()
+                .oidcUserService(oidcUserService()) // OIDC 사용자 서비스 설정 (카카오, 네이버 등의 OIDC 서비스에 따라 다름)
+                .and()
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter1(), UsernamePasswordAuthenticationFilter.class);
     }
-
-
-
-    // 카카오 OAuth2 설정
     @Bean
-    public ClientRegistrationRepository clientRegistrationRepository() {
-        return new InMemoryClientRegistrationRepository(kakaoClientRegistration(),naverClientRegistration());
+    public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
+        return new OidcUserService();
     }
 
-
-    // 카카오 클라이언트 설정
-    private ClientRegistration kakaoClientRegistration() {
-        return ClientRegistration.withRegistrationId("kakao")
-                .clientId("YOUR_KAKAO_CLIENT_ID")
-                .clientSecret("YOUR_KAKAO_CLIENT_SECRET")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .redirectUriTemplate("{baseUrl}/login/oauth2/code/kakao")
-                .scope("profile")
-                .authorizationUri("https://kauth.kakao.com/oauth/authorize")
-                .tokenUri("https://kauth.kakao.com/oauth/token")
-                .userInfoUri("https://kapi.kakao.com/v2/user/me")
-                .userNameAttributeName("id")
-                .clientName("Kakao")
-                .build();
-    }
-
-
-    private ClientRegistration naverClientRegistration() {
-        return ClientRegistration.withRegistrationId("naver")
-                .clientId("AN7ep_CD_ii1ftJlANpq")
-                .clientSecret("BxmrzjFAhZT")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .redirectUriTemplate("{baseUrl}/login/oauth2/code/naver")
-                .scope("profile")
-                .authorizationUri("https://nid.naver.com/oauth2.0/authorize")
-                .tokenUri("https://nid.naver.com/oauth2.0/token")
-                .userInfoUri("https://openapi.naver.com/v1/nid/me")
-                .userNameAttributeName("id")
-                .clientName("Naver")
-                .build();
-    }
 
 }
