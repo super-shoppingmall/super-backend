@@ -13,12 +13,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Optional;
 
 @Service
 public class MemberService implements UserDetailsService {
+    private final String MEMBER_IMAGE_DIR = "member";
+
     private final MemberRepository memberRepository;
 
     @Autowired
@@ -33,6 +37,10 @@ public class MemberService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    // hyuna
+    @Autowired
+    private S3Uploader s3Uploader;
 
 
     @Override
@@ -128,11 +136,15 @@ public class MemberService implements UserDetailsService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
 
-        // 회원이 존재하면 dto로 들어온 정보 값을 넣고
+        // 이미지는 s3에 업로드
+        File file = s3Uploader.convert(memberDTO.getImage()).orElseThrow(() -> new RuntimeException("MultipartFile => File 변환에 실패하였습니다."));
+        String fileUrl = s3Uploader.putS3(file, MEMBER_IMAGE_DIR);
+
+        // 회원이 존재하면 dto로 들어온 정보 값, s3 url을 넣고
         member.setPhone(memberDTO.getPhone());
         member.setAddress(memberDTO.getAddress());
         member.setAboutMe(memberDTO.getAboutMe());
-        member.setProfileImage(memberDTO.getProfileImage());
+        member.setProfileImage(fileUrl);
 
         Member newMember = memberRepository.save(member);
 
@@ -140,6 +152,7 @@ public class MemberService implements UserDetailsService {
         MemberDTO newMemberDto = MemberMapper.INSTANCE.memberEntityToDto(newMember);
         return newMemberDto;
     }
+
 }
 
 

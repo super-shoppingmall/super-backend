@@ -29,8 +29,7 @@ public class Product{
     private int productPrice;
     private int productQuantity;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // 저장, 수정, 삭제 같이됨.
-    //@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL) // 저장, 수정, 삭제 같이됨.
     private List<ProductImage> images = new ArrayList<>();  //productImages;
 
     private String productDetail;

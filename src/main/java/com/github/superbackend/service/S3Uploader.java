@@ -71,7 +71,7 @@ public class S3Uploader {
     }
 
 
-    private String putS3(File uploadFile, String fileName) {
+    public String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
@@ -84,7 +84,7 @@ public class S3Uploader {
         }
     }
 
-    private Optional<File> convert(MultipartFile file) {
+    public Optional<File> convert(MultipartFile file) {
 
         try {
             File convertedFile = File.createTempFile("temp", null);
