@@ -61,6 +61,14 @@ public class MemberController {
             return new ResponseEntity<>("Signup failed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PostMapping("/check-email")
+    public ResponseEntity<String> checkEmail(@RequestBody String email) {
+        if (memberService.isEmailAlreadyExists(email)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists");
+        } else {
+            return ResponseEntity.ok("Email is available");
+        }
+    }
     @DeleteMapping("/{memberId}")
     public ResponseEntity<?> deleteMember(@PathVariable Long memberId) {
         // 회원 탈퇴 메서드 호출
