@@ -1,15 +1,19 @@
 package com.github.superbackend.entity;
-import com.github.superbackend.service.MemberService;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -64,7 +68,11 @@ public class Member {
     public boolean isAccountLocked() {
         return loginAttempts >=maxLoginAttempts && lockTime != null && lockTime.after(new Date());
     }
-
+    public UserDetails toUserDetails() {
+        // 사용자의 권한을 설정하고 UserDetails를 생성합니다.
+        List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+        return new User(email, password, authorities);
+    }
 
 }
- //userdetails
+//userdetails
