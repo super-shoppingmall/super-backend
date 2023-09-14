@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 server:
   port: 8080
 
+=======
+>>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
 #EC2에 접근 하는 application
 spring:
   config:

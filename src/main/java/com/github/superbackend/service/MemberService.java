@@ -13,16 +13,23 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+<<<<<<< HEAD
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+=======
+
+>>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
 import java.util.Collections;
 import java.util.Optional;
 
 @Service
 public class MemberService implements UserDetailsService {
+<<<<<<< HEAD
     private final String MEMBER_IMAGE_DIR = "member";
 
+=======
+>>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
     private final MemberRepository memberRepository;
 
     @Autowired
@@ -38,10 +45,13 @@ public class MemberService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+<<<<<<< HEAD
     // hyuna
     @Autowired
     private S3Uploader s3Uploader;
 
+=======
+>>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -136,6 +146,7 @@ public class MemberService implements UserDetailsService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
 
+<<<<<<< HEAD
         // 9.14 hyuna : 이미지를 안보내도 되도록 수정하기
         if (memberDTO.getImage() != null) {
             // 이미지는 s3에 업로드
@@ -148,6 +159,13 @@ public class MemberService implements UserDetailsService {
         member.setPhone(memberDTO.getPhone() != null ?  memberDTO.getPhone() : member.getPhone());
         member.setAddress(memberDTO.getAddress() != null ?  memberDTO.getAddress() : member.getAddress());
         member.setAboutMe(memberDTO.getAboutMe() != null ?  memberDTO.getAboutMe() : member.getAboutMe());
+=======
+        // 회원이 존재하면 dto로 들어온 정보 값을 넣고
+        member.setPhone(memberDTO.getPhone());
+        member.setAddress(memberDTO.getAddress());
+        member.setAboutMe(memberDTO.getAboutMe());
+        member.setProfileImage(memberDTO.getProfileImage());
+>>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
 
         Member newMember = memberRepository.save(member);
 
@@ -155,7 +173,10 @@ public class MemberService implements UserDetailsService {
         MemberDTO newMemberDto = MemberMapper.INSTANCE.memberEntityToDto(newMember);
         return newMemberDto;
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
 }
 
 

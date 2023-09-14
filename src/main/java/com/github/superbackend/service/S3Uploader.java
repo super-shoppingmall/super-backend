@@ -71,9 +71,13 @@ public class S3Uploader {
     }
 
 
+<<<<<<< HEAD
     public String putS3(File uploadFile, String dirName, String originName) {
         UUID uuid = UUID.randomUUID();
         String fileName = dirName + "/" + uuid + "_" + originName;
+=======
+    private String putS3(File uploadFile, String fileName) {
+>>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
         amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
@@ -86,7 +90,11 @@ public class S3Uploader {
         }
     }
 
+<<<<<<< HEAD
     public Optional<File> convert(MultipartFile file) {
+=======
+    private Optional<File> convert(MultipartFile file) {
+>>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
 
         try {
             File convertedFile = File.createTempFile("temp", null);

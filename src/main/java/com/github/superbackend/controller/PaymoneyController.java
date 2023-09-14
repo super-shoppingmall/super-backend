@@ -27,7 +27,11 @@ public class PaymoneyController {
                                                       @AuthenticationPrincipal UserDetails userDetails
     ) {
         // TODO : userDetails 확인필요 => memberId..
+<<<<<<< HEAD
         String username = userDetails.getUsername();
+=======
+        String username = "2"; //userDetails.getUsername();
+>>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
         Integer money = paymoneyRequest.getPaymoney();
 
         Paymoney paymoney = paymoneyService.savePaymoney(Long.parseLong(username), money, true);

@@ -4,7 +4,10 @@ import com.github.superbackend.dto.ProductSaleReqDto;
 import com.github.superbackend.dto.ProductSaleResDto;
 import com.github.superbackend.service.ProductSaleService;
 import lombok.RequiredArgsConstructor;
+<<<<<<< HEAD
 import org.springframework.http.HttpStatus;
+=======
+>>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,6 +42,7 @@ public class ProductSaleController {
     @GetMapping("/myproducts")
     public ResponseEntity<List<ProductSaleResDto>> getMyProductsOnSale(
             @AuthenticationPrincipal UserDetails userDetails) {
+<<<<<<< HEAD
 
 
         List<ProductSaleResDto> products = productSaleService.getProductsOnSale(userDetails.getUsername(), true);
@@ -92,6 +96,12 @@ public class ProductSaleController {
     }
 
 
+=======
+        List<ProductSaleResDto> products = productSaleService.getProductsOnSale(userDetails.getUsername());
+        return ResponseEntity.ok(products);
+    }
+
+>>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
     // 상품 상태 업데이트 (판매 종료 날짜가 지난 상품의 상태를 CLOSED로 변경)
     @PatchMapping("/updateStatus")
     public ResponseEntity<Void> updateProductStatus() {
@@ -100,7 +110,10 @@ public class ProductSaleController {
     }
 
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
 }
