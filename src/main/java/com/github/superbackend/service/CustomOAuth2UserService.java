@@ -3,7 +3,6 @@ package com.github.superbackend.service;
 import com.github.superbackend.dto.OAuth2TokenResponse;
 import com.github.superbackend.util.OAuth2ApiCaller;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.security.core.userdetails.User;
@@ -14,10 +13,11 @@ import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
@@ -106,5 +106,77 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuth2TokenResponse tokenResponse = new OAuth2TokenResponse(token, refreshToken);
 
         return tokenResponse;
+    }
+
+    public OAuth2TokenResponse exchangeKakaoToken(String code, String state) {
+        // 클라이언트 정보 설정
+        String clientId = "4d2a29f8306fbf8a928369e63863131a";
+        String tokenExchangeUrl = "http://localhost:3000/login";
+
+        // HTTP 요청 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setBasicAuth(clientId); // 클라이언트 자격 증명 설정
+
+        // HTTP 요청 매개변수 설정 (grant_type, code, state 등)
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("code", code);
+        params.add("state", state);
+
+        // HTTP 요청 엔터티 생성 (헤더 및 매개변수 설정)
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
+
+        // 토큰 교환 요청 및 응답 처리
+        ResponseEntity<OAuth2TokenResponse> responseEntity = restTemplate.exchange(
+                tokenExchangeUrl,
+                HttpMethod.POST,
+                requestEntity,
+                OAuth2TokenResponse.class
+        );
+
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            // 토큰 교환 성공
+            return responseEntity.getBody();
+        } else {
+            // 토큰 교환 실패
+            return null;
+        }
+    }
+    public OAuth2TokenResponse exchangeNaverToken(String code, String state) {
+        // 클라이언트 정보 설정
+        String clientId = "HqT1K0HX1G9SnQCI33km";
+        String clientSecret = "MiH6Y4F614";
+        String tokenExchangeUrl = "http://localhost:3000/login ";
+
+        // HTTP 요청 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setBasicAuth(clientId, clientSecret); // 클라이언트 자격 증명 설정
+
+        // HTTP 요청 매개변수 설정 (grant_type, code, state 등)
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("code", code);
+        params.add("state", state);
+
+        // HTTP 요청 엔터티 생성 (헤더 및 매개변수 설정)
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
+
+        // 토큰 교환 요청 및 응답 처리
+        ResponseEntity<OAuth2TokenResponse> responseEntity = restTemplate.exchange(
+                tokenExchangeUrl,
+                HttpMethod.POST,
+                requestEntity,
+                OAuth2TokenResponse.class
+        );
+
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            // 토큰 교환 성공
+            return responseEntity.getBody();
+        } else {
+            // 토큰 교환 실패
+            return null;
+        }
     }
 }
