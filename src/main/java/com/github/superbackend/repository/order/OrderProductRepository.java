@@ -1,6 +1,6 @@
-package com.github.superbackend.repository;
+package com.github.superbackend.repository.order;
 
-import com.github.superbackend.entity.OrderProduct;
+import com.github.superbackend.repository.order.OrderProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderProductRepository extends JpaRepository<OrderProduct, Long> {

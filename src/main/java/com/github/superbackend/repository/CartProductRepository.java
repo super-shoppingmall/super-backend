@@ -1,7 +1,7 @@
 package com.github.superbackend.repository;
 
 import com.github.superbackend.dto.CartDetailDto;
-import com.github.superbackend.entity.CartProduct;
+import com.github.superbackend.repository.cart.CartProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

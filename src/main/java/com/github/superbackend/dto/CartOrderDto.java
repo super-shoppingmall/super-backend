@@ -1,5 +1,6 @@
 package com.github.superbackend.dto;
 
+import com.github.superbackend.repository.cart.CartProduct;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,6 @@ public class CartOrderDto {
 
     private Long cartProductId;
 
-    private List<CartOrderDto> cartOrderDtoList;
+    private List<CartProductDto> cartOrderDtoList;
 
 }

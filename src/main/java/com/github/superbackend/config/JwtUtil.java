@@ -23,7 +23,7 @@ public class JwtUtil {
 
 
     public String getEmailFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().get("email").toString();
     }
 
     public boolean isTokenValid(String token) {

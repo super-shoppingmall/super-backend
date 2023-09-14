@@ -2,7 +2,7 @@ package com.github.superbackend.dto;
 
 
 import com.github.superbackend.constant.OrderStatus;
-import com.github.superbackend.entity.Order;
+import com.github.superbackend.repository.order.Order;
 import lombok.Getter;
 import lombok.Setter;
 

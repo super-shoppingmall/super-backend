@@ -2,6 +2,7 @@ package com.github.superbackend.security;
 
 import com.github.superbackend.config.JwtUtil;
 import com.github.superbackend.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,13 +18,14 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private final JwtUtil jwtUtil;
+    private final MemberService memberService;
 
-
-    private  JwtUtil jwtUtil;
-
-    private  MemberService memberService;
-
-
+    @Autowired
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, MemberService memberService) {
+        this.jwtUtil = jwtUtil;
+        this.memberService = memberService;
+    }
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String header = request.getHeader("Authorization");

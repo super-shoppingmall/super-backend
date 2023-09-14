@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -34,16 +35,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtUtil jwtUtil;
     private MemberService memberService;
     private UserDetailsService userDetailsService;
+    private RestTemplate restTemplate;
 
     @Autowired
-    public SecurityConfig(JwtUtil jwtUtil, MemberService memberService) {
+    public SecurityConfig(JwtUtil jwtUtil, MemberService memberService, RestTemplate restTemplate) {
         this.jwtUtil = jwtUtil;
         this.memberService = memberService;
+        this.restTemplate = restTemplate;
     }
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter1() {
-        return new JwtAuthenticationFilter();
+        return new JwtAuthenticationFilter(jwtUtil, memberService);
     }
 
     @Bean
@@ -63,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable() // ID, Password 문자열을 Base64로 인코딩하여 전달하는 구조
                 .rememberMe().disable()
                 .authorizeRequests()
-                .antMatchers("/login", "/login/oauth2/code/naver", "/login/oauth2/code/kakao", "/api/auth/**","/api/members/**", "/api/paymoney", "/api/products/sale/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs", "/webjars/**").permitAll()
+                .antMatchers("/login", "/login/oauth2/code/naver", "/login/oauth2/code/kakao", "/api/auth/**","/api/members/**", "/api/products/sale/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs", "/webjars/**").permitAll()
                 .antMatchers("/user").hasAnyRole("USER") // /user 엔드포인트에 대한 접근 권한 설정
                 .anyRequest().authenticated()
                 .and()

@@ -1,6 +1,7 @@
 package com.github.superbackend.repository.product;
 
 
+import com.github.superbackend.exception.OutOfStockException;
 import com.github.superbackend.repository.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,5 +53,19 @@ public class Product{
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    // 재명 추가
+    // 재고 삭제
+    public void removeStock(int productQuantity){
+        int restStock = this.productQuantity - productQuantity;
+        if(restStock<0){
+            throw new OutOfStockException("상품의 재고가 부족 합니다. (현재 재고 수량: " + this.productQuantity + ")");
+        }
+        this.productQuantity = restStock;
+    }
+    // 재고 추가
+    public void addStock(int productQuantity){
+        this.productQuantity += productQuantity;
+    }
 }
 

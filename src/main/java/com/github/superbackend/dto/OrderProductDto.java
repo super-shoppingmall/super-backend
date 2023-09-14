@@ -1,7 +1,8 @@
 package com.github.superbackend.dto;
 
 
-import com.github.superbackend.entity.OrderProduct;
+import com.github.superbackend.repository.order.OrderProduct;
+import com.github.superbackend.repository.order.OrderProduct;
 import lombok.Getter;
 import lombok.Setter;
 
