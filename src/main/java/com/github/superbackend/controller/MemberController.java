@@ -92,7 +92,7 @@ public class MemberController {
 
     @ApiOperation("회원 유저 정보 수정")
     @PutMapping("/{memberId}")
-    public ResponseEntity<MemberDTO> updateMember(@RequestBody MemberDTO memberDTO, @PathVariable Long memberId) {
+    public ResponseEntity<MemberDTO> updateMember(MemberDTO memberDTO, @PathVariable Long memberId) {
         MemberDTO member = memberService.updateMember(memberDTO, memberId);
 
         if (member != null) {

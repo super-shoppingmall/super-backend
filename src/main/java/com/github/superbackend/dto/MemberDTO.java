@@ -2,6 +2,7 @@ package com.github.superbackend.dto;
 
 import lombok.Data;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class MemberDTO {
@@ -12,6 +13,7 @@ public class MemberDTO {
     private String gender;
     private String aboutMe;
     private String profileImage;
+    private MultipartFile image;
 
     // Getter, Setter 및 생성자 생략
 
