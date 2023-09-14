@@ -1,7 +1,7 @@
 package com.github.superbackend.service;
 
 import com.github.superbackend.dto.MemberDTO;
-import com.github.superbackend.repository.member.Member;
+import com.github.superbackend.entity.Member;
 import com.github.superbackend.repository.member.MemberRepository;
 import com.github.superbackend.service.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +13,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.Optional;
 
 @Service
 public class MemberService implements UserDetailsService {
-    private final String MEMBER_IMAGE_DIR = "member";
-
     private final MemberRepository memberRepository;
 
+    private final int maxLoginAttempts = 5;       // 최대 로그인 실패 횟수
+    private final int lockDurationMinutes = 30;   // 잠금 기간 (분)
     @Autowired
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
@@ -38,10 +36,13 @@ public class MemberService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // hyuna
-    @Autowired
-    private S3Uploader s3Uploader;
-
+    public Long getMemberIdByEmail(String email) {
+        Member member = memberRepository.findByEmail(email);
+        if (member != null) {
+            return member.getMemberId();
+        }
+        return null; // 해당 이메일을 가진 멤버가 없을 경우 null 반환
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -119,6 +120,20 @@ public class MemberService implements UserDetailsService {
         return true; // 성공적으로 탈퇴 처리된 경우 true 반환
     }
 
+    // 로그인 실패 횟수 증가 및 잠금 상태 확인
+    public boolean loginFailed(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElse(null);
+        if (member != null) {
+            member.incrementLoginAttempts();
+            if (member.getLoginAttempts() >= maxLoginAttempts) {
+                member.setAccountLocked(maxLoginAttempts, lockDurationMinutes);
+            }
+            memberRepository.save(member);
+            return member.isAccountLocked();
+        }
+        return false;
+    }
+
     // hyuna
     @Transactional(readOnly = true)
     public MemberDTO getMember(Long memberId) {
@@ -155,7 +170,6 @@ public class MemberService implements UserDetailsService {
         MemberDTO newMemberDto = MemberMapper.INSTANCE.memberEntityToDto(newMember);
         return newMemberDto;
     }
-
 }
 
 
