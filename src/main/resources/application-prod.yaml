@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 #EC2에 접근 하는 application
 spring:
   config:

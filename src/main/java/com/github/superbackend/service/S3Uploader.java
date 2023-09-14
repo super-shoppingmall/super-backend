@@ -71,7 +71,9 @@ public class S3Uploader {
     }
 
 
-    public String putS3(File uploadFile, String fileName) {
+    public String putS3(File uploadFile, String dirName, String originName) {
+        UUID uuid = UUID.randomUUID();
+        String fileName = dirName + "/" + uuid + "_" + originName;
         amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
