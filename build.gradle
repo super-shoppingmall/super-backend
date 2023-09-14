@@ -3,24 +3,19 @@ plugins {
     id 'org.springframework.boot' version '2.7.14'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
-
 group = 'com.github'
 version = '0.0.1-SNAPSHOT'
-
 java {
     sourceCompatibility = '11'
 }
-
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
 }
-
 repositories {
     mavenCentral()
 }
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -33,18 +28,10 @@ dependencies {
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.3.8.RELEASE'
-
-    // Spring Boot Starter와 Spring Security 추가
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.security:spring-security-oauth2-client'
 
-    // 네이버 OAuth2 클라이언트 라이브러리 추가
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'com.github.scribejava:scribejava-core:7.3.0' // 네이버 OAuth2에 필요한 라이브러리
-
-    // 카카오 OAuth2 클라이언트 라이브러리 추가
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
+tasks.named('test') {    useJUnitPlatform()
 }
