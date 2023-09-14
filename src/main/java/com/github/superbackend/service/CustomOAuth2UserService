@@ -1,7 +1,9 @@
 package com.github.superbackend.service;
 
+import com.github.superbackend.dto.OAuth2TokenResponse;
 import com.github.superbackend.util.OAuth2ApiCaller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.security.core.userdetails.User;
@@ -11,6 +13,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -86,5 +89,22 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         throw new OAuth2AuthenticationException(new OAuth2Error("invalid_client_registration", "Unsupported registration ID", null));
     }
 
+    public OAuth2TokenResponse exchangeToken(String code, String state) {
+        // 1. 클라이언트 정보 설정
+        String clientId = "your_client_id"; // OAuth 2.0 클라이언트 ID
+        String clientSecret = "your_client_secret"; // OAuth 2.0 클라이언트 시크릿
+        String tokenExchangeUrl = "https://oauth2-provider.com/token"; // OAuth 2.0 토큰 교환 엔드포인트 URL
 
+        // 2. OAuth 2.0 토큰 교환을 위한 요청 준비
+        OAuth2AccessToken token = null; // 교환된 액세스 토큰
+        OAuth2RefreshToken refreshToken = null; // 교환된 리프레시 토큰
+
+        // 여기에 토큰 교환 요청을 보내고 응답을 처리하는 코드를 작성해야 합니다.
+        // 코드와 상태 값을 사용하여 토큰 교환 요청을 만들고, 클라이언트 ID 및 시크릿을 사용하여 인증을 수행합니다.
+
+        // 3. 토큰 교환 성공 시, 교환된 토큰 정보를 OAuth2TokenResponse에 설정
+        OAuth2TokenResponse tokenResponse = new OAuth2TokenResponse(token, refreshToken);
+
+        return tokenResponse;
+    }
     }
