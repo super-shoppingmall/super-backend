@@ -2,7 +2,6 @@ package com.github.superbackend.controller;
 
 import com.github.superbackend.config.JwtUtil;
 import com.github.superbackend.dto.MemberDTO;
-import com.github.superbackend.dto.ResponseDto;
 import com.github.superbackend.repository.member.Member;
 import com.github.superbackend.service.MemberService;
 import io.swagger.annotations.ApiOperation;
@@ -63,6 +62,14 @@ public class MemberController {
             return new ResponseEntity<>("Signup failed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PostMapping("/check-email")
+    public ResponseEntity<String> checkEmail(@RequestBody String email) {
+        if (memberService.isEmailAlreadyExists(email)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists");
+        } else {
+            return ResponseEntity.ok("Email is available");
+        }
+    }
     @DeleteMapping("/{memberId}")
     public ResponseEntity<?> deleteMember(@PathVariable Long memberId) {
         // 회원 탈퇴 메서드 호출
@@ -74,7 +81,6 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴 실패");
         }
     }
-
     // hyuna
     @ApiOperation("회원 유저 정보 조회")
     @GetMapping("/{memberId}")
@@ -92,11 +98,7 @@ public class MemberController {
 
     @ApiOperation("회원 유저 정보 수정")
     @PutMapping("/{memberId}")
-<<<<<<< HEAD
     public ResponseEntity<MemberDTO> updateMember(MemberDTO memberDTO, @PathVariable Long memberId) {
-=======
-    public ResponseEntity<MemberDTO> updateMember(@RequestBody MemberDTO memberDTO, @PathVariable Long memberId) {
->>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
         MemberDTO member = memberService.updateMember(memberDTO, memberId);
 
         if (member != null) {

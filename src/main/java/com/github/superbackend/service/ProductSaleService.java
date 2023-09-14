@@ -4,23 +4,13 @@ import com.github.superbackend.dto.ProductSaleReqDto;
 import com.github.superbackend.dto.ProductSaleResDto;
 import com.github.superbackend.repository.member.Member;
 import com.github.superbackend.repository.member.MemberRepository;
-<<<<<<< HEAD
 import com.github.superbackend.repository.product.*;
-=======
-import com.github.superbackend.repository.product.Product;
-import com.github.superbackend.repository.product.ProductImage;
-import com.github.superbackend.repository.product.ProductRepository;
-import com.github.superbackend.repository.product.ProductStatus;
->>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-<<<<<<< HEAD
 import java.util.Collections;
-=======
->>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,10 +25,6 @@ public class ProductSaleService {
     @Transactional
     public ProductSaleResDto registerProductSale(String username, ProductSaleReqDto reqDto) {
         // 로그인 한 사람 = 판매자
-<<<<<<< HEAD
-=======
-        //Member seller = memberRepository.findByEmail(username).orElseThrow(() -> new IllegalArgumentException("No MemberId"));
->>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
         Member seller = memberRepository.findByEmail(username);
         //System.out.println("셀러" + seller);
 
@@ -80,11 +66,7 @@ public class ProductSaleService {
     // Entity -> DTO 변환 메소드
     public ProductSaleResDto convertToDto(Product savedproduct) {
         ProductSaleResDto resDto = new ProductSaleResDto();
-<<<<<<< HEAD
         resDto.setMemberId(savedproduct.getMember().getMemberId());
-=======
-        // resDto.setMemberId(savedproduct.getMember().getMemberId());
->>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
         resDto.setProductId(savedproduct.getProductId());
         resDto.setProductName(savedproduct.getProductName());
         resDto.setCategoryName(savedproduct.getCategoryName());
@@ -92,10 +74,7 @@ public class ProductSaleService {
         resDto.setProductQuantity(savedproduct.getProductQuantity());
         resDto.setProductDetail(savedproduct.getProductDetail());
         resDto.setClosingAt(savedproduct.getClosingAt());
-<<<<<<< HEAD
         resDto.setProductStatus(savedproduct.getProductStatus().name());
-=======
->>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
         resDto.setProductImageUrls(savedproduct.getImages().stream()
                 .map(ProductImage::getProductImageUrl)
                 .collect(Collectors.toList()));
@@ -103,7 +82,6 @@ public class ProductSaleService {
     }
 
     @Transactional(readOnly = true)
-<<<<<<< HEAD
     public List<ProductSaleResDto> getProductsOnSale(String username, boolean isActive) {
         Member seller = memberRepository.findByEmail(username);
         System.out.println(seller.toString());
@@ -150,16 +128,6 @@ public class ProductSaleService {
         }
 
         return null; // 재고 수정에 실패한 경우 null 반환
-=======
-    public List<ProductSaleResDto> getProductsOnSale(String username) {
-        Member seller = memberRepository.findByEmail(username);
-
-        List<Product> products = productRepository.findByMemberAndClosingAtAfter(seller, LocalDate.now());
-
-        return products.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
->>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
     }
 
     @Transactional

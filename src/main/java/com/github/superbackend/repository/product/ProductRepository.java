@@ -13,7 +13,6 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-<<<<<<< HEAD
     @Modifying
     @Query("update Product p set p.productStatus = :status where p.closingAt < :now")
     int updateStatusForPastProducts(@Param("status") ProductStatus status, @Param("now") LocalDate now);
@@ -24,10 +23,4 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByMemberAndProductStatusIsNotActive();
 
     Product findByProductIdAndMember(Long productId, Member seller);
-=======
-    List<Product> findByMemberAndClosingAtAfter(Member member, LocalDate now);
-    @Modifying
-    @Query("update Product p set p.productStatus = :status where p.closingAt < :now")
-    int updateStatusForPastProducts(@Param("status") ProductStatus status, @Param("now") LocalDate now);
->>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
 }

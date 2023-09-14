@@ -13,25 +13,22 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-<<<<<<< HEAD
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-=======
-
->>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
 import java.util.Collections;
 import java.util.Optional;
 
 @Service
 public class MemberService implements UserDetailsService {
-<<<<<<< HEAD
     private final String MEMBER_IMAGE_DIR = "member";
-
-=======
->>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
     private final MemberRepository memberRepository;
+    // hyuna
+    @Autowired
+    private S3Uploader s3Uploader;
 
+
+    private final int maxLoginAttempts = 5;       // 최대 로그인 실패 횟수
+    private final int lockDurationMinutes = 30;   // 잠금 기간 (분)
     @Autowired
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
@@ -45,13 +42,13 @@ public class MemberService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-<<<<<<< HEAD
-    // hyuna
-    @Autowired
-    private S3Uploader s3Uploader;
-
-=======
->>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
+    public Long getMemberIdByEmail(String email) {
+        Member member = memberRepository.findByEmail(email);
+        if (member != null) {
+            return member.getMemberId();
+        }
+        return null; // 해당 이메일을 가진 멤버가 없을 경우 null 반환
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -129,6 +126,20 @@ public class MemberService implements UserDetailsService {
         return true; // 성공적으로 탈퇴 처리된 경우 true 반환
     }
 
+    // 로그인 실패 횟수 증가 및 잠금 상태 확인
+    public boolean loginFailed(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElse(null);
+        if (member != null) {
+            member.incrementLoginAttempts();
+            if (member.getLoginAttempts() >= maxLoginAttempts) {
+                member.setAccountLocked(maxLoginAttempts, lockDurationMinutes);
+            }
+            memberRepository.save(member);
+            return member.isAccountLocked();
+        }
+        return false;
+    }
+
     // hyuna
     @Transactional(readOnly = true)
     public MemberDTO getMember(Long memberId) {
@@ -146,7 +157,6 @@ public class MemberService implements UserDetailsService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
 
-<<<<<<< HEAD
         // 9.14 hyuna : 이미지를 안보내도 되도록 수정하기
         if (memberDTO.getImage() != null) {
             // 이미지는 s3에 업로드
@@ -159,13 +169,6 @@ public class MemberService implements UserDetailsService {
         member.setPhone(memberDTO.getPhone() != null ?  memberDTO.getPhone() : member.getPhone());
         member.setAddress(memberDTO.getAddress() != null ?  memberDTO.getAddress() : member.getAddress());
         member.setAboutMe(memberDTO.getAboutMe() != null ?  memberDTO.getAboutMe() : member.getAboutMe());
-=======
-        // 회원이 존재하면 dto로 들어온 정보 값을 넣고
-        member.setPhone(memberDTO.getPhone());
-        member.setAddress(memberDTO.getAddress());
-        member.setAboutMe(memberDTO.getAboutMe());
-        member.setProfileImage(memberDTO.getProfileImage());
->>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
 
         Member newMember = memberRepository.save(member);
 
@@ -173,10 +176,6 @@ public class MemberService implements UserDetailsService {
         MemberDTO newMemberDto = MemberMapper.INSTANCE.memberEntityToDto(newMember);
         return newMemberDto;
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 77c5796dd2bbf019c9786d9f7aef41ff62bcc57f
 }
 
 

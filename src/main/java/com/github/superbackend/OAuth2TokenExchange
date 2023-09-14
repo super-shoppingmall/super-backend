@@ -1,0 +1,54 @@
+package com.github.superbackend.util;
+
+import com.github.superbackend.dto.OAuth2TokenResponse;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Base64;
+
+public class OAuth2TokenExchange {
+
+    public OAuth2TokenResponse exchangeToken(String code, String state) {
+        // OAuth 2.0 공급자의 토큰 교환 엔드포인트 URL (Naver 또는 Kakao)
+        String tokenExchangeUrl = "https://oauth2-provider.com/token";
+
+        // 클라이언트가 전달한 code와 state
+        String clientId = "your_client_id"; // 클라이언트 ID
+        String clientSecret = "your_client_secret"; // 클라이언트 시크릿
+
+        // HTTP 요청을 보내기 위한 RestTemplate 생성
+        RestTemplate restTemplate = new RestTemplate();
+
+        // HTTP 요청 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setBasicAuth(clientId, clientSecret); // 클라이언트 자격 증명 설정
+
+        // HTTP 요청 매개변수 설정 (code, state 및 기타 필요한 매개변수)
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("code", code);
+        params.add("state", state);
+
+        // HTTP 요청 엔터티 생성 (헤더 및 매개변수 설정)
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
+
+        // 토큰 교환 요청 및 응답 처리
+        ResponseEntity<OAuth2TokenResponse> responseEntity = restTemplate.exchange(
+                tokenExchangeUrl,
+                HttpMethod.POST,
+                requestEntity,
+                OAuth2TokenResponse.class
+        );
+
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            // 토큰 교환 성공
+            return responseEntity.getBody();
+        } else {
+            // 토큰 교환 실패
+            return null;
+        }
+    }
+}
