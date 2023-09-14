@@ -1,9 +1,11 @@
 package com.github.superbackend.controller;
+
 import com.github.superbackend.config.JwtUtil;
 import com.github.superbackend.dto.JwtResponse;
 import com.github.superbackend.dto.LoginRequest;
 import com.github.superbackend.dto.MemberDTO;
-import com.github.superbackend.entity.Member;
+import com.github.superbackend.repository.member.Member;
+import com.github.superbackend.repository.member.Member;
 import com.github.superbackend.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Collection;
-
 
 
 @RestController
@@ -83,7 +84,7 @@ public class AuthController {
 
         if (registeredMember != null) {
             // 회원가입 성공 시 JWT 토큰 생성
-            String jwt = jwtUtil.generateToken(email);
+            String jwt = jwtUtil.generateToken(Long.parseLong(memberId), String.valueOf(Integer.parseInt(email)));
 
             // 클라이언트에게 JWT 토큰을 반환
             return ResponseEntity.ok(jwt);

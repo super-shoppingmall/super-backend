@@ -1,6 +1,6 @@
 package com.github.superbackend.service;
 
-import com.github.superbackend.entity.Member;
+import com.github.superbackend.repository.member.Member;
 import com.github.superbackend.repository.member.MemberRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

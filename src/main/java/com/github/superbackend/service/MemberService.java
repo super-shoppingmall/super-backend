@@ -1,7 +1,7 @@
 package com.github.superbackend.service;
 
 import com.github.superbackend.dto.MemberDTO;
-import com.github.superbackend.entity.Member;
+import com.github.superbackend.repository.member.Member;
 import com.github.superbackend.repository.member.MemberRepository;
 import com.github.superbackend.service.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +14,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Optional;
 
 @Service
 public class MemberService implements UserDetailsService {
+    private final String MEMBER_IMAGE_DIR = "member";
     private final MemberRepository memberRepository;
+    // hyuna
+    @Autowired
+    private S3Uploader s3Uploader;
+
 
     private final int maxLoginAttempts = 5;       // 최대 로그인 실패 횟수
     private final int lockDurationMinutes = 30;   // 잠금 기간 (분)

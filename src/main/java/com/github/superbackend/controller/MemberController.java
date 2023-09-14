@@ -2,7 +2,7 @@ package com.github.superbackend.controller;
 
 import com.github.superbackend.config.JwtUtil;
 import com.github.superbackend.dto.MemberDTO;
-import com.github.superbackend.entity.Member;
+import com.github.superbackend.repository.member.Member;
 import com.github.superbackend.service.MemberService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

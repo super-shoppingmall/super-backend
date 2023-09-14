@@ -1,4 +1,4 @@
-package com.github.superbackend.entity;
+package com.github.superbackend.repository.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -44,6 +47,8 @@ public class Member {
     private LocalDateTime updatedAt;
     @Column(name = "status")
     private String status;
+    @Column(name = "about_me")
+    private String aboutMe;
 
 
     private int loginAttempts; // 로그인 실패 횟수
