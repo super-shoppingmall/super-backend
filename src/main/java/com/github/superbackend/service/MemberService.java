@@ -136,15 +136,18 @@ public class MemberService implements UserDetailsService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
 
-        // 이미지는 s3에 업로드
-        File file = s3Uploader.convert(memberDTO.getImage()).orElseThrow(() -> new RuntimeException("MultipartFile => File 변환에 실패하였습니다."));
-        String fileUrl = s3Uploader.putS3(file, MEMBER_IMAGE_DIR, memberDTO.getImage().getOriginalFilename());
+        // 9.14 hyuna : 이미지를 안보내도 되도록 수정하기
+        if (memberDTO.getImage() != null) {
+            // 이미지는 s3에 업로드
+            File file = s3Uploader.convert(memberDTO.getImage()).orElseThrow(() -> new RuntimeException("MultipartFile => File 변환에 실패하였습니다."));
+            String fileUrl = s3Uploader.putS3(file, MEMBER_IMAGE_DIR, memberDTO.getImage().getOriginalFilename());
+            member.setProfileImage(fileUrl);
+        }
 
         // 회원이 존재하면 dto로 들어온 정보 값, s3 url을 넣고
-        member.setPhone(memberDTO.getPhone());
-        member.setAddress(memberDTO.getAddress());
-        member.setAboutMe(memberDTO.getAboutMe());
-        member.setProfileImage(fileUrl);
+        member.setPhone(memberDTO.getPhone() != null ?  memberDTO.getPhone() : member.getPhone());
+        member.setAddress(memberDTO.getAddress() != null ?  memberDTO.getAddress() : member.getAddress());
+        member.setAboutMe(memberDTO.getAboutMe() != null ?  memberDTO.getAboutMe() : member.getAboutMe());
 
         Member newMember = memberRepository.save(member);
 
