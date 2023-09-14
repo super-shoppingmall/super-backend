@@ -81,7 +81,7 @@ public class MemberService implements UserDetailsService {
 
     public Member registerMember(MemberDTO memberDTO) {
         // 이메일을 기준으로 중복 회원 검사
-       String email =  memberDTO.getEmail();
+        String email =  memberDTO.getEmail();
         String password = memberDTO.getPassword();
 
         if (memberRepository.existsByEmail(email)) {
@@ -131,7 +131,6 @@ public class MemberService implements UserDetailsService {
         return false;
     }
 }
-
 
 
 

@@ -8,7 +8,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/shop?serverTimezone=Asia/Seoul
     username: root
-    password: 12341234
+    password: 4487
   main:
     allow-circular-references: true
     allow-bean-definition-overriding: true
@@ -30,16 +30,9 @@ spring:
       client:
         registration:
           naver:
-            client-id: AN7ep_CD_ii1ftJlANpq
-            client-secret: BxmrzjFAhZ
-            redirect-uri: http://localhost:8080/login/oauth2/code/naver
-            authorization-grant-type: authorization_code
-            scope: name email profile_image
-            client-name: supercoding
+            client-id: HqT1K0HX1G9SnQCI33km
+            client-secret: MiH6Y4F614
+            redirect-uri:  https://super-fe.netlify.app/login
           kakao:
-            client-id: acc3bcadd86193c806f6391bcad98507
-            client-secret: tPH1IS0ZGwCxuMPUkr6OCl0ywlFSLltx
-            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
-            authorization-grant-type: authorization_code
-            scope: profile_nickname account_email
-            client-name: supercoding
+            client-id: 4d2a29f8306fbf8a928369e63863131a
+            redirect-uri:  https://super-fe.netlify.app/login
