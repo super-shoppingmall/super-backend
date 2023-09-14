@@ -138,7 +138,7 @@ public class MemberService implements UserDetailsService {
 
         // 이미지는 s3에 업로드
         File file = s3Uploader.convert(memberDTO.getImage()).orElseThrow(() -> new RuntimeException("MultipartFile => File 변환에 실패하였습니다."));
-        String fileUrl = s3Uploader.putS3(file, MEMBER_IMAGE_DIR);
+        String fileUrl = s3Uploader.putS3(file, MEMBER_IMAGE_DIR, memberDTO.getImage().getOriginalFilename());
 
         // 회원이 존재하면 dto로 들어온 정보 값, s3 url을 넣고
         member.setPhone(memberDTO.getPhone());
