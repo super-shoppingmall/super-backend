@@ -39,9 +39,6 @@ public class OrderProduct {
         return orderProduct;
     }
 
-    @Column(name = "order_item_id", columnDefinition = "BIGINT DEFAULT 1L")
-    private Long orderItemId;
-
     public int getTotalPrice(){
         return orderPrice*count;
     }
