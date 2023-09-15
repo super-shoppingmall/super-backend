@@ -17,29 +17,35 @@ import org.springframework.web.bind.annotation.RestController;
 public class OAuth2Controller {
 
 
-//    private final CustomOAuth2UserService customOAuth2UserService;
-//
-//    @PostMapping("/exchange-kakao-token")
-//    public ResponseEntity<?> exchangeKakaoToken(@RequestParam("code") String code, @RequestParam("state") String state) {
-//        // 카카오 토큰 교환
-//        OAuth2TokenResponse tokenResponse = customOAuth2UserService.exchangeKakaoToken(code, state);
-//
-//        if (tokenResponse != null) {
-//            return ResponseEntity.ok(tokenResponse);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Kakao token exchange failed");
-//        }
-//    }
-//
-//    @PostMapping("/exchange-naver-token")
-//    public ResponseEntity<?> exchangeNaverToken(@RequestParam("code") String code, @RequestParam("state") String state) {
-//        // 네이버 토큰 교환
-//        OAuth2TokenResponse tokenResponse = customOAuth2UserService.exchangeNaverToken(code, state);
-//
-//        if (tokenResponse != null) {
-//            return ResponseEntity.ok(tokenResponse);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Naver token exchange failed");
-//        }
-//    }
+  private  CustomOAuth2UserService customOAuth2UserService;
+
+    OAuth2Controller(){}
+
+    public OAuth2Controller(CustomOAuth2UserService customOAuth2UserService) {
+            this.customOAuth2UserService =customOAuth2UserService;
+    }
+
+    @PostMapping("/exchange-kakao-token")
+    public ResponseEntity<?> exchangeKakaoToken(@RequestParam("code") String code, @RequestParam("state") String state) {
+        // 카카오 토큰 교환
+        OAuth2TokenResponse tokenResponse = customOAuth2UserService.exchangeKakaoToken(code, state);
+
+        if (tokenResponse != null) {
+            return ResponseEntity.ok(tokenResponse);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Kakao token exchange failed");
+        }
+    }
+
+    @PostMapping("/exchange-naver-token")
+    public ResponseEntity<?> exchangeNaverToken(@RequestParam("code") String code, @RequestParam("state") String state) {
+        // 네이버 토큰 교환
+        OAuth2TokenResponse tokenResponse = customOAuth2UserService.exchangeNaverToken(code, state);
+
+        if (tokenResponse != null) {
+            return ResponseEntity.ok(tokenResponse);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Naver token exchange failed");
+        }
+    }
 }
