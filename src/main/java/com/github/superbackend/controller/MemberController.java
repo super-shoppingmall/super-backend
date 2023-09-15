@@ -1,22 +1,35 @@
 package com.github.superbackend.controller;
 
 import com.github.superbackend.config.JwtUtil;
+import com.github.superbackend.dto.JwtResponse;
+import com.github.superbackend.dto.LoginRequest;
 import com.github.superbackend.dto.MemberDTO;
 import com.github.superbackend.entity.Member;
 import com.github.superbackend.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/api/members")
 public class MemberController {
     private final MemberService memberService;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public MemberController(MemberService memberService) {
+    public MemberController(MemberService memberService, AuthenticationManager authenticationManager) {
         this.memberService = memberService;
+        this.authenticationManager = authenticationManager;
     }
     @Autowired
     private JwtUtil jwtUtil;
@@ -33,13 +46,27 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password) {
-        Member member = memberService.login(email, password);
-        if (member != null) {
-            return ResponseEntity.ok("로그인 성공");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
-        }
+    public JwtResponse login(@Valid @RequestBody LoginRequest loginRequest) {
+        // 인증 후 JWT 토큰 생성
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // 사용자 정보 추출
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername(); // 이메일 가져오기
+
+        // memberId를 어떻게 얻는지에 따라서 다음과 같이 memberId를 얻을 수 있을 것입니다.
+        // 예: memberId를 사용자 정보에서 조회하는 메서드를 호출하여 얻는다고 가정
+        Long memberId = memberService.getMemberIdByEmail(email); // memberId 조회 예시
+
+        // JwtResponse 객체 생성 및 반환
+        String jwt = jwtUtil.generateToken(memberId, email);
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+
+        return new JwtResponse(jwt, email, authorities);
     }
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody MemberDTO memberDTO) {
