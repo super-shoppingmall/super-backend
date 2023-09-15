@@ -69,7 +69,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody MemberDTO memberDTO) {
         // 클라이언트로부터 전달된 회원 정보(MemberDTO)를 추출
-        String memberId = memberDTO.getMemberId();
+        // String memberId = memberDTO.getMemberId();
         String email = memberDTO.getEmail();
         String password = memberDTO.getPassword();
         String phone = memberDTO.getPhone();
@@ -84,7 +84,7 @@ public class AuthController {
 
         if (registeredMember != null) {
             // 회원가입 성공 시 JWT 토큰 생성
-            String jwt = jwtUtil.generateToken(Long.parseLong(memberId), email);
+            String jwt = jwtUtil.generateToken(registeredMember.getMemberId(), email);
 
             // 클라이언트에게 JWT 토큰을 반환
             return ResponseEntity.ok(jwt);
