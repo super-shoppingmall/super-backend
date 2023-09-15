@@ -14,13 +14,13 @@ import javax.persistence.*;
 @Data
 @Entity
 public class Paymoney {
-     @Id
-     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     private Long paymoneyId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long paymoneyId;
 
-     @ManyToOne
-     @JoinColumn(name = "member_id")
-     private Member member;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-     private Integer paymoney;
+    private Integer paymoney;
 }

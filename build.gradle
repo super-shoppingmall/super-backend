@@ -46,6 +46,10 @@ dependencies {
     // Mapstruct
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+    // OAuth
+    implementation 'org.springframework.security:spring-security-oauth2-client'
+    implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.3.8.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter'
 }
 
 tasks.named('test') {

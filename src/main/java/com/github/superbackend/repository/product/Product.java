@@ -1,6 +1,7 @@
 package com.github.superbackend.repository.product;
 
 
+import com.github.superbackend.exception.OutOfStockException;
 import com.github.superbackend.repository.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +30,8 @@ public class Product{
     private int productPrice;
     private int productQuantity;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL) // 저장, 수정, 삭제 같이됨.
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // 저장, 수정, 삭제 같이됨.
+    //@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductImage> images = new ArrayList<>();  //productImages;
 
     private String productDetail;
@@ -51,5 +53,19 @@ public class Product{
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    // 재명 추가
+    // 재고 삭제
+    public void removeStock(int productQuantity){
+        int restStock = this.productQuantity - productQuantity;
+        if(restStock<0){
+            throw new OutOfStockException("상품의 재고가 부족 합니다. (현재 재고 수량: " + this.productQuantity + ")");
+        }
+        this.productQuantity = restStock;
+    }
+    // 재고 추가
+    public void addStock(int productQuantity){
+        this.productQuantity += productQuantity;
+    }
 }
 

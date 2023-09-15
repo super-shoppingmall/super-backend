@@ -1,5 +1,5 @@
-
 package com.github.superbackend.repository.cart;
+
 
 import com.github.superbackend.repository.member.Member;
 import lombok.Getter;
@@ -7,22 +7,24 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "cart")
-@Getter
-@Setter
+@Getter @Setter
 @ToString
 public class Cart {
+
     @Id
     @Column(name = "cart_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long cartId;
 
-    @OneToOne(fetch = FetchType.LAZY) // OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member member;
-
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     public static Cart createCart(Member member){
         Cart cart = new Cart();
         cart.setMember(member);
@@ -30,4 +32,3 @@ public class Cart {
     }
 
 }
-

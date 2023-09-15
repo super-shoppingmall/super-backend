@@ -1,6 +1,7 @@
 package com.github.superbackend.controller;
 
 
+import com.github.superbackend.config.CustomUserDetails;
 import com.github.superbackend.dto.PaymoneyRequest;
 import com.github.superbackend.dto.ResponseDto;
 import com.github.superbackend.repository.paymoney.Paymoney;
@@ -26,11 +27,9 @@ public class PaymoneyController {
     public ResponseEntity<ResponseDto> insertPaymoney(@RequestBody PaymoneyRequest paymoneyRequest,
                                                       @AuthenticationPrincipal UserDetails userDetails
     ) {
-        // TODO : userDetails 확인필요 => memberId..
-        String username = userDetails.getUsername();
         Integer money = paymoneyRequest.getPaymoney();
 
-        Paymoney paymoney = paymoneyService.savePaymoney(Long.parseLong(username), money, true);
+        Paymoney paymoney = paymoneyService.savePaymoney(userDetails.getUsername(), money, true);
 
         if (paymoney != null) {
             return ResponseEntity.ok(ResponseDto.builder()
@@ -51,10 +50,8 @@ public class PaymoneyController {
 
     @ApiOperation("멤버아이디로 쇼핑몰 페이머니 조회")
     @GetMapping
-    public ResponseEntity<ResponseDto> getPaymoney() { // @AuthenticationPrincipal UserDetails userDetails
-        // TODO : Userdetails 확인 필요
-        String username = "2"; //userDetails.getUsername();
-        Paymoney paymoney = paymoneyService.findPaymoney(Long.parseLong(username));
+    public ResponseEntity<ResponseDto> getPaymoney(@AuthenticationPrincipal UserDetails userDetails) { // @AuthenticationPrincipal UserDetails userDetails
+        Paymoney paymoney = paymoneyService.findPaymoney(userDetails.getUsername());
 
         if (paymoney != null) {
             return ResponseEntity.ok(ResponseDto.builder()
@@ -74,12 +71,10 @@ public class PaymoneyController {
 
     @ApiOperation("쇼핑몰 페이머니 결제, 차감")
     @PutMapping
-    public ResponseEntity<ResponseDto> updatePaymoney(@RequestBody PaymoneyRequest paymoneyRequest) { // ,@AuthenticationPrincipal UserDetails userDetails
-        // TODO : userDetails 확인필요
-        String username = "2"; //userDetails.getUsername();
+    public ResponseEntity<ResponseDto> updatePaymoney(@RequestBody PaymoneyRequest paymoneyRequest, @AuthenticationPrincipal UserDetails userDetails) { // ,@AuthenticationPrincipal UserDetails userDetails
         Integer money = paymoneyRequest.getPaymoney();
 
-        Paymoney paymoney = paymoneyService.savePaymoney(Long.parseLong(username), money, false);
+        Paymoney paymoney = paymoneyService.savePaymoney(userDetails.getUsername(), money, false);
 
         if (paymoney != null) {
             return ResponseEntity.ok(ResponseDto.builder()
