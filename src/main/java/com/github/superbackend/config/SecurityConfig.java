@@ -84,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", "https://super-fe.netlify.app"));
         configuration.setAllowCredentials(true); // token 주고 받을 때,
         configuration.addExposedHeader("Authorization"); // token
         configuration.addAllowedHeader("*");
