@@ -84,7 +84,7 @@ public class AuthController {
 
         if (registeredMember != null) {
             // 회원가입 성공 시 JWT 토큰 생성
-            String jwt = jwtUtil.generateToken(Long.parseLong(memberId), String.valueOf(Integer.parseInt(email)));
+            String jwt = jwtUtil.generateToken(Long.parseLong(memberId), email);
 
             // 클라이언트에게 JWT 토큰을 반환
             return ResponseEntity.ok(jwt);

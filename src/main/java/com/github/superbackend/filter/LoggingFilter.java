@@ -2,13 +2,18 @@ package com.github.superbackend.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.*;
 
 @Component
 @Slf4j
@@ -17,12 +22,19 @@ public class LoggingFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String method = request.getMethod();
         String uri = request.getRequestURI();
+        String userAgent = request.getHeader("User-Agent");
+        String contentType = request.getHeader("Content-Type");
 
         log.info(method + uri + " 요청이 들어왔습니다.");
-        log.info(request.getRequestURL().toString());
+        log.info("Request URL : " + request.getRequestURL());
+        log.info("Request userAgent : " + userAgent);
+        log.info("Request contentType : " + contentType);
 
+
+        // doFilter
         filterChain.doFilter(request, response);
 
-        log.info(method + uri + "가 상태 " + response.getStatus() + " 로 응답이 나갑니다." );
+        log.info("Response : " + method + uri + "가 상태 " + response.getStatus() + " 로 응답이 나갑니다." );
     }
+
 }
