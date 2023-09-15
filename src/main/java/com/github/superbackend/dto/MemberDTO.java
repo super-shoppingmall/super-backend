@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class MemberDTO {
+    private String memberId;
     private String email;
     private String password;
     private String phone;

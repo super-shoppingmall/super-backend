@@ -1,6 +1,7 @@
 package com.github.superbackend.service;
 
 import com.github.superbackend.repository.member.Member;
+import com.github.superbackend.repository.member.MemberRepository;
 import com.github.superbackend.repository.paymoney.Paymoney;
 import com.github.superbackend.repository.paymoney.PaymoneyRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PaymoneyService {
     private final PaymoneyRepository paymoneyRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
-    public Paymoney savePaymoney(Long memberId, Integer money, boolean isCharge) {
+    public Paymoney savePaymoney(String email, Integer money, boolean isCharge) {
         // 페이머니를 조회한 후
-        Paymoney paymoney = findPaymoney(memberId);
+        Paymoney paymoney = findPaymoney(email);
 
         // 페이머니 충전의 경우
         if (isCharge) {
@@ -27,9 +29,11 @@ public class PaymoneyService {
             }
             // 페이머니가 존재하지 않으면 새로 저장(Insert)
             else {
+                Member member = memberRepository.findByEmail(email);
+
                 return paymoneyRepository.save(
                         Paymoney.builder()
-                                .member(Member.builder().memberId(memberId).build())
+                                .member(member)
                                 .paymoney(money)
                                 .build()
                 );
@@ -51,10 +55,12 @@ public class PaymoneyService {
     }
 
     @Transactional(readOnly = true)
-    public Paymoney findPaymoney(Long memberId) {
+    public Paymoney findPaymoney(String email) {
+        Member member = memberRepository.findByEmail(email);
+
         Paymoney paymoney = paymoneyRepository.findAllByMember(
                 Member.builder()
-                        .memberId(memberId)
+                        .memberId(member.getMemberId())
                         .build()
         );
 

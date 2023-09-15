@@ -81,7 +81,7 @@ class PaymoneyServiceTest {
 
         when(paymoneyRepository.save(paymoney)).thenReturn(paymoney);
 
-        when(paymoneyService.findPaymoney(member.getMemberId())).thenReturn(paymoney);
+       // when(paymoneyService.findPaymoney(member.getEmail())
 
         // verify
         assertEquals(1000, paymoney.getPaymoney());

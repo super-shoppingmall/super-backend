@@ -23,4 +23,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByMemberAndProductStatusIsNotActive();
 
     Product findByProductIdAndMember(Long productId, Member seller);
+    List<Product> findByMemberAndClosingAtAfter(Member member, LocalDate now);
+    @Modifying
+    @Query("update Product p set p.productStatus = :status where p.closingAt < :now")
+    int updateStatusForPastProducts(@Param("status") com.github.superbackend.constant.ProductStatus status, @Param("now") LocalDate now);
 }
